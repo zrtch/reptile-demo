@@ -13,7 +13,7 @@ class Crowller {
     private secret = 'secretKey';
     private url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`;
 
-    //数据生成
+    //数据生成方法
     getCourseInfo(html: string){
         const $ = cheerio.load(html)
         const courseItems = $('.course-item')
