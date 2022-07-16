@@ -1,3 +1,7 @@
+/*
+ * @Descripttion: 
+ * @Date: 2022-07-14 00:32:15
+ */
 //首先要创建一个爬虫的类
 // ts -> .d.ts 翻译文件 -> js
 import superagent from 'superagent' // 这里是js代码  得安装cnpm i --save-dev @types/superagent -D 
@@ -13,7 +17,7 @@ class Crowller {
     private secret = 'secretKey';
     private url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`;
 
-    //数据生成方法
+    //数据生成
     getCourseInfo(html: string){
         const $ = cheerio.load(html)
         const courseItems = $('.course-item')
