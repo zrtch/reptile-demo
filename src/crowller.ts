@@ -1,88 +1,47 @@
 /*
- * @Descripttion: 
+ * @Descripttion:
  * @Date: 2022-07-14 00:32:15
  */
 //首先要创建一个爬虫的类
 // ts -> .d.ts 翻译文件 -> js
 import fs from 'fs' //判断
 import path from 'path' //node核心模块
-import superagent from 'superagent' // 这里是js代码  得安装cnpm i --save-dev @types/superagent -D 
-import cheerio from 'cheerio'
-import { data } from 'cheerio/lib/api/attributes';
-
-interface Course{
-    title: string;
-    count: number
+import superagent from 'superagent' // 这里是js代码  得安装cnpm i --save-dev @types/superagent -D
+import { data } from 'cheerio/lib/api/attributes'
+import DellAnalyzer from './dellAnalyzer'
+import LeeAnalyzer from './leeAnalyzer' //不同的爬取只需要建不同的分析类
+ 
+export interface Analyze {
+    analyze: (html: string, filePath: string) => string
 }
 
-interface CourseResult{
-    time: number,
-    data: Course[]
-}
-
-interface Content{
-    [propName: number]: Course[]
-}
-
+//负责爬取内容
 class Crowller {
-    private secret = 'secretKey';
-    private url = `http://www.dell-lee.com/typescript/demo.html?secret=${this.secret}`;
-
-    //数据生成
-    getCourseInfo(html: string){
-        const $ = cheerio.load(html)
-        const courseItems = $('.course-item')
-        const courseInfos: Course[] = []
-        courseItems.map((index,element)=>{
-            const descs = $(element).find('.course-desc');
-            const title = descs.eq(0).text()
-            const count = parseInt(descs.eq(1).text().split('：')[1])
-            courseInfos.push({
-                title,count
-            })
-        })
-       return {
-            time: new Date().getTime(),
-            data: courseInfos
-        }
-    }
-
-
-
-   async getRawHtml(){
+    //只关注数据存在哪
+    private filePath = path.resolve(__dirname, '../data/course.json')
+    //只关注取哪里的数据
+    async getRawHtml() {
         const result = await superagent.get(this.url)
         return result.text
     }
-
-    //作用就是生成json
-    genrateJsonContent(courseInfo: CourseResult){
-        //首先去读course.json，看它存不存在
-        const filePath = path.resolve(__dirname,'../data/course.json'); 
-        //不存在默认是个空对象
-        let fileContent:Content = {};
-        //存在的话就把course.json读取出来存给 fileContent
-        if(fs.existsSync(filePath)){
-            fileContent = JSON.parse(fs.readFileSync(filePath,'utf-8'))
-        }
-        //然后把这次爬取的courseInfo也存到content里面去
-        fileContent[courseInfo.time] = courseInfo.data
-
-        return fileContent
+    //关注数据怎么写
+    writeFile(content: string) {
+        fs.writeFileSync(this.filePath, content)
     }
 
-    async initSpiderProcess(){
-       const filePath = path.resolve(__dirname,'../data/course.json'); 
-       const html = await this.getRawHtml()
-       const courseInfo =  this.getCourseInfo(html)  
-       const fileContent = this.genrateJsonContent(courseInfo) //首先拿到所有的courseInfo，通过它去生成json的content内容
-       fs.writeFileSync(filePath,JSON.stringify(fileContent))
-
+    async initSpiderProcess() {
+        const html = await this.getRawHtml() 
+        const fileContent = this.analyzer.analyze(html, this.filePath)
+        this.writeFile(fileContent) //最后去存储
     }
 
-    constructor(){
-        this.initSpiderProcess();
+    constructor(private url: string, private analyzer: Analyze) {
+        this.initSpiderProcess()
     }
 }
 
-const crowller = new Crowller();
- 
+const secret = 'secretKey'
+const url = `http://www.dell-lee.com/typescript/demo.html?secret=${secret}`
+
+const analyzer = new DellAnalyzer()
+new Crowller(url,analyzer)
