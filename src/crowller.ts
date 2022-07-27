@@ -9,7 +9,7 @@ import path from 'path' //node核心模块
 import superagent from 'superagent' // 这里是js代码  得安装cnpm i --save-dev @types/superagent -D
 import { data } from 'cheerio/lib/api/attributes'
 import DellAnalyzer from './dellAnalyzer'
-import LeeAnalyzer from './leeAnalyzer' //不同的爬取只需要建不同的分析类
+// import LeeAnalyzer from './leeAnalyzer' //不同的爬取只需要建不同的分析类
  
 export interface Analyze {
     analyze: (html: string, filePath: string) => string
@@ -20,16 +20,16 @@ class Crowller {
     //只关注数据存在哪
     private filePath = path.resolve(__dirname, '../data/course.json')
     //只关注取哪里的数据
-    async getRawHtml() {
+    private async getRawHtml() {
         const result = await superagent.get(this.url)
         return result.text
     }
     //关注数据怎么写
-    writeFile(content: string) {
+    private writeFile(content: string) {
         fs.writeFileSync(this.filePath, content)
     }
 
-    async initSpiderProcess() {
+    private async initSpiderProcess() {
         const html = await this.getRawHtml() 
         const fileContent = this.analyzer.analyze(html, this.filePath)
         this.writeFile(fileContent) //最后去存储
@@ -43,5 +43,5 @@ class Crowller {
 const secret = 'secretKey'
 const url = `http://www.dell-lee.com/typescript/demo.html?secret=${secret}`
 
-const analyzer = new DellAnalyzer()
-new Crowller(url,analyzer)
+const analyzer = DellAnalyzer.getInstance()
+const croller = new Crowller(url,analyzer)
