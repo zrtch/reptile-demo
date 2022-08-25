@@ -9,7 +9,7 @@ enum Status {
 console.log(Status.OFFLINE); // 0
 console.log(Status.ONLINE); // 1
 console.log(Status.DELETED); // 2
-//反向去查枚举类型的名称
+// 反向去查枚举类型的名称
 console.log(Status[0]); // OFFLINE
 
 function getResult(status){
