@@ -1,7 +1,3 @@
-/*
- * @Descripttion: 
- * @Date: 2022-08-24 22:46:34
- */
 //解决的是场景就是某一个状态是固定的几个值，那就可以用枚举类型表示，默认从0开始
 enum Status {
     OFFLINE,
@@ -13,15 +9,15 @@ enum Status {
 console.log(Status.OFFLINE); // 0
 console.log(Status.ONLINE); // 1
 console.log(Status.DELETED); // 2
-// 反向去查枚举类型的名称
+//反向去查枚举类型的名称
 console.log(Status[0]); // OFFLINE
 
-function getResult(status){
-    if(status === Status.OFFLINE){
+function getResult(status) {
+    if (status === Status.OFFLINE) {
         return 'offline';
-    }else if(status ===Status.ONLINE ){
+    } else if (status === Status.ONLINE) {
         return 'online'
-    }else if(status ===Status.DELETED){
+    } else if (status === Status.DELETED) {
         return 'deleted'
     }
     return 'error'
