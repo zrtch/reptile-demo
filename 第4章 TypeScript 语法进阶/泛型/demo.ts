@@ -2,13 +2,13 @@
 function join<T>(first: T, second: T){
     return `${first}${second}`
 }
-// 调用join这个方法的时候，指定ABC这个泛型具体类型的是string
+// 调用join这个方法的时候，指定T这个泛型具体类型的是string
 join<string>('1','1')
 join<number>(1,1)
 join<string>('1', 1) //number就不匹配了
 
 // T[] 或者 Array<T>
-function map<T>(params:Array<T>){
+function map<T>(params:T[]){
     return params
 }
 map<string>(['123'])
