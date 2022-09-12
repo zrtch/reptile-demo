@@ -7,7 +7,7 @@ join<string>('1','1')
 join<number>(1,1)
 join<string>('1', 1) //number就不匹配了
 
-//  T[] 或者Array<T>
+//  T[] 或者 Array<T>
 function map<T>(params:T[]){
     return params
 }
