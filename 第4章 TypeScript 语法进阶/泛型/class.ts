@@ -25,7 +25,7 @@ const data2 = new DateManager1([
     }
 ])
 
-// 如何使用泛型作为一个具体的类型注解
+//如何使用泛型作为一个具体的类型注解
 function hello<T>(param: T){
     return param
 }
