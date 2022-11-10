@@ -4,7 +4,7 @@
  */
 import cheerio from 'cheerio'
 import fs from 'fs'
-import { Analyze } from './crowller'
+import { Analyze } from '../utils/crowller'
 
 interface Course {
     title: string

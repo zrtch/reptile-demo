@@ -17,7 +17,7 @@ export interface Analyze {
 //负责爬取内容
 class Crowller {
     //只关注数据存在哪
-    private filePath = path.resolve(__dirname, '../data/course.json')
+    private filePath = path.resolve(__dirname, '../../data/course.json')
     //只关注取哪里的数据
     private async getRawHtml() {
         const result = await superagent.get(this.url)
