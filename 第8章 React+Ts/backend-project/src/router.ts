@@ -78,7 +78,7 @@ router.post('/api/login', (req: BodyRequest, res: Response) => {
 })
 
 //爬取数据
-router.get('/getData', checkLogin , (req: BodyRequest, res: Response) => {
+router.get('/api/getData', checkLogin , (req: BodyRequest, res: Response) => {
     const secret = 'secretKey'
     const url = `http://www.dell-lee.com/typescript/demo.html?secret=${secret}`
     const analyzer = Analyzer.getInstance()
@@ -87,7 +87,7 @@ router.get('/getData', checkLogin , (req: BodyRequest, res: Response) => {
 })
 
 //展示爬取数据
-router.get('/showData', checkLogin ,(req: BodyRequest, res: Response) => {
+router.get('/api/showData', checkLogin ,(req: BodyRequest, res: Response) => {
     try{
       const positon = path.resolve(__dirname,'../data/course.json')
       const result = fs.readFileSync(positon,'utf-8') //通过utf-8读取文件内容

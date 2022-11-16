@@ -75,7 +75,7 @@ router.post('/api/login', (req, res) => {
     }
 });
 //爬取数据
-router.get('/getData', checkLogin, (req, res) => {
+router.get('/api/getData', checkLogin, (req, res) => {
     const secret = 'secretKey';
     const url = `http://www.dell-lee.com/typescript/demo.html?secret=${secret}`;
     const analyzer = analyzer_1.default.getInstance();
@@ -83,7 +83,7 @@ router.get('/getData', checkLogin, (req, res) => {
     res.json((0, utils_1.getResponseData)(true));
 });
 //展示爬取数据
-router.get('/showData', checkLogin, (req, res) => {
+router.get('/api/showData', checkLogin, (req, res) => {
     try {
         const positon = path_1.default.resolve(__dirname, '../data/course.json');
         const result = fs_1.default.readFileSync(positon, 'utf-8'); //通过utf-8读取文件内容

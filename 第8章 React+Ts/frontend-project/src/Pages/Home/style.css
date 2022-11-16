@@ -1,9 +1,8 @@
 .home-page{
-  width: 300px;
-  margin: 100px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
+  padding:0 50px;
 }
-.home-page .ant-btn{
-  margin-right: 22px;
+.home-page .buttons{
+  width: 200px;
+  margin: 30px auto;
+  padding: 20px;
 }
