@@ -48,6 +48,11 @@ router.get('/', (req: BodyRequest, res: Response) => {
   }
 })
 
+router.get('/api/isLogin', (req: BodyRequest, res: Response) => {
+  const isLogin = req.session ? req.session.login : false
+  res.json(getResponseData(isLogin))
+})
+
 //退出
 router.get('/logout', (req: BodyRequest, res: Response) => {
   if(req.session){

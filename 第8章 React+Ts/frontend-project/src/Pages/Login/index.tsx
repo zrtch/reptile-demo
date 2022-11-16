@@ -1,7 +1,7 @@
 import { LockOutlined } from '@ant-design/icons';
 import { Button , Form, Input } from 'antd';
 import React from 'react';
-import './login.css'
+import './style.css'
 
 const App: React.FC = () => {
   const onFinish = (values: any) => {

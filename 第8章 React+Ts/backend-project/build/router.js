@@ -47,6 +47,10 @@ router.get('/', (req, res) => {
     `);
     }
 });
+router.get('/api/isLogin', (req, res) => {
+    const isLogin = req.session ? req.session.login : false;
+    res.json((0, utils_1.getResponseData)(isLogin));
+});
 //退出
 router.get('/logout', (req, res) => {
     if (req.session) {
