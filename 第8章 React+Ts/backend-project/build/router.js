@@ -21,49 +21,48 @@ const checkLogin = (req, res, next) => {
     }
 };
 const router = (0, express_1.Router)();
-router.get('/', (req, res) => {
-    const isLogin = req.session ? req.session.login : false;
-    if (isLogin) {
-        res.send(`
-    <html>
-      <body>
-        <a href='/getData'>爬取内容</a>
-        <a href='/showData'>展示内容</a>
-        <a href='/logout'>退出</a>
-      </body>
-    </html>
-    `);
-    }
-    else {
-        res.send(`
-    <html>
-      <body>
-        <form method="post" action="/login">
-          <input type="password" name="password" />
-          <button>登录</button>
-        </form>
-      </body>
-    </html>
-    `);
-    }
-});
+// router.get('/', (req: BodyRequest, res: Response) => {
+//   const isLogin = req.session ? req.session.login : false
+//   if(isLogin){
+//     res.send(`
+//     <html>
+//       <body>
+//         <a href='/getData'>爬取内容</a>
+//         <a href='/showData'>展示内容</a>
+//         <a href='/logout'>退出</a>
+//       </body>
+//     </html>
+//     `)
+//   }else{
+//     res.send(`
+//     <html>
+//       <body>
+//         <form method="post" action="/login">
+//           <input type="password" name="password" />
+//           <button>登录</button>
+//         </form>
+//       </body>
+//     </html>
+//     `)
+//   }
+// })
 router.get('/api/isLogin', (req, res) => {
     const isLogin = req.session ? req.session.login : false;
     res.json((0, utils_1.getResponseData)(isLogin));
 });
 //退出
-router.get('/logout', (req, res) => {
+router.get('/api/logout', (req, res) => {
     if (req.session) {
         req.session.login = undefined;
     }
     res.json((0, utils_1.getResponseData)(true));
 });
 //登录模块
-router.post('/login', (req, res) => {
+router.post('/api/login', (req, res) => {
     const { password } = req.body;
     const isLogin = req.session ? req.session.login : false;
     if (isLogin) {
-        res.json((0, utils_1.getResponseData)(false, "已经登录过"));
+        res.json((0, utils_1.getResponseData)(true));
     }
     else {
         if (password === '123' && req.session) {

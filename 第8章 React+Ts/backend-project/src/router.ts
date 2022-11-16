@@ -22,31 +22,31 @@ const checkLogin = (req: Request, res: Response, next: NextFunction) => {
 
 const router = Router()
 
-router.get('/', (req: BodyRequest, res: Response) => {
-  const isLogin = req.session ? req.session.login : false
-  if(isLogin){
-    res.send(`
-    <html>
-      <body>
-        <a href='/getData'>爬取内容</a>
-        <a href='/showData'>展示内容</a>
-        <a href='/logout'>退出</a>
-      </body>
-    </html>
-    `)
-  }else{
-    res.send(`
-    <html>
-      <body>
-        <form method="post" action="/login">
-          <input type="password" name="password" />
-          <button>登录</button>
-        </form>
-      </body>
-    </html>
-    `)
-  }
-})
+// router.get('/', (req: BodyRequest, res: Response) => {
+//   const isLogin = req.session ? req.session.login : false
+//   if(isLogin){
+//     res.send(`
+//     <html>
+//       <body>
+//         <a href='/getData'>爬取内容</a>
+//         <a href='/showData'>展示内容</a>
+//         <a href='/logout'>退出</a>
+//       </body>
+//     </html>
+//     `)
+//   }else{
+//     res.send(`
+//     <html>
+//       <body>
+//         <form method="post" action="/login">
+//           <input type="password" name="password" />
+//           <button>登录</button>
+//         </form>
+//       </body>
+//     </html>
+//     `)
+//   }
+// })
 
 router.get('/api/isLogin', (req: BodyRequest, res: Response) => {
   const isLogin = req.session ? req.session.login : false
@@ -54,7 +54,7 @@ router.get('/api/isLogin', (req: BodyRequest, res: Response) => {
 })
 
 //退出
-router.get('/logout', (req: BodyRequest, res: Response) => {
+router.get('/api/logout', (req: BodyRequest, res: Response) => {
   if(req.session){
     req.session.login = undefined
   }
@@ -62,11 +62,11 @@ router.get('/logout', (req: BodyRequest, res: Response) => {
 })
 
 //登录模块
-router.post('/login', (req: BodyRequest, res: Response) => {
+router.post('/api/login', (req: BodyRequest, res: Response) => {
   const { password } = req.body
   const isLogin = req.session ? req.session.login : false
   if (isLogin) {
-    res.json(getResponseData(false,"已经登录过"))
+    res.json(getResponseData(true))
   } else {
     if ( password === '123' && req.session ) {
         req.session.login = true
