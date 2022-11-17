@@ -4,11 +4,24 @@ import { Button, message } from 'antd';
 import ReactECharts from 'echarts-for-react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios'
+import moment from 'moment'
+interface CourseItem {
+  title:string;
+  count:number 
+}
+interface State {
+  loaded:Boolean;
+  isLogin:Boolean;
+  data:{
+     [key: string]:CourseItem[]
+  }
+}
 
 class Home extends Component{
-  state = {
+  state: State = {
     loaded: false,
-    isLogin: true
+    isLogin: true,
+    data:{}
   }
   componentDidMount(): void {
     axios.get('api/isLogin').then((res)=>{
@@ -20,6 +33,15 @@ class Home extends Component{
       }else{
         this.setState({
           loaded:true 
+        })
+      }
+    });
+
+    axios.get('api/showData').then((res)=>{
+      if(res.data?.data){
+        console.log(res.data.data)
+        this.setState({
+          data: res.data.data
         })
       }
     })
@@ -49,15 +71,40 @@ class Home extends Component{
 
   // 引入第三方库发现定义文件有问题可以通过这样的方式进行解决
   getOption:() => echarts.EChartsOption = () => {
+    const { data } = this.state
+    const courseName: string[] = []
+    const times: string[] = []
+    const result: any[] = []
+    const tempData:{
+      [key:string]: number[]
+    } = {}
+    for(let i in data){
+      const item = data[i]
+      times.push(moment(Number(i)).format('MM-DD HH:mm'))
+      item.forEach(innerItem=>{
+        const { title,count } = innerItem
+        if(courseName.indexOf(innerItem.title) === -1){
+          courseName.push(title)
+        }
+        tempData[title] ? tempData[title].push(count): (tempData[title] = [count])
+      })
+      for(let i in tempData){
+        result.push({
+          name:i,
+          data:tempData[i],
+          type: 'line',
+        })
+      }
+    }
     return{
         title: {
-          text: 'Stacked Line'
+          text: '课程在线学习'
         },
         tooltip: {
           trigger: 'axis'
         },
         legend: {
-          data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+          data: courseName
         },
         grid: {
           left: '3%',
@@ -65,51 +112,15 @@ class Home extends Component{
           bottom: '3%',
           containLabel: true
         },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: times
         },
         yAxis: {
           type: 'value'
         },
-        series: [
-          {
-            name: 'Email',
-            type: 'line',
-            stack: 'Total',
-            data: [120, 132, 101, 134, 90, 230, 210]
-          },
-          {
-            name: 'Union Ads',
-            type: 'line',
-            stack: 'Total',
-            data: [220, 182, 191, 234, 290, 330, 310]
-          },
-          {
-            name: 'Video Ads',
-            type: 'line',
-            stack: 'Total',
-            data: [150, 232, 201, 154, 190, 330, 410]
-          },
-          {
-            name: 'Direct',
-            type: 'line',
-            stack: 'Total',
-            data: [320, 332, 301, 334, 390, 330, 320]
-          },
-          {
-            name: 'Search Engine',
-            type: 'line',
-            stack: 'Total',
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
-          }
-        ]
+        series: result
       };
   }
 
